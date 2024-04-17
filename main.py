@@ -1,9 +1,23 @@
 from Solver import Solver
 
+PHI = 1
+SIDE_LEN = 1e-2
+
 
 def main():
-    solver = Solver(10, 1e-2, 1, 0.1)
-    solver.solve()
+    # part 1
+    print("Part 1")
+    solver_1_10 = Solver(10, SIDE_LEN, 1, PHI)
+    solver_1_20 = Solver(20, SIDE_LEN, 1, PHI)
+    solver_1_30 = Solver(30, SIDE_LEN, 1, PHI)
+    solver_1_10.solve()
+    solver_1_20.solve()
+    solver_1_30.solve()
+    print("\n")
+
+    # part 2
+    print("Part 2")
+    solver_2_10 = Solver(10, SIDE_LEN, 2, PHI)
 
 
 # call main function after declaration

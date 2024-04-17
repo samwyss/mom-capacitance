@@ -1,7 +1,8 @@
 from numpy import linspace, meshgrid, ones, zeros, pi, sqrt, floor
-from scipy.constants import epsilon_0
+from scipy.constants import epsilon_0, e
 from numpy.linalg import solve
 import matplotlib.pyplot as plt
+from matplotlib.colors import LogNorm
 
 
 class Solver:
@@ -14,8 +15,15 @@ class Solver:
         :param phi: potential of the plate
         """
 
+        # instantiate self.capacitance and self.total_charge to zero
+        self.capacitance = 0.0
+        self.total_charge = 0.0
+
         # assign num_elements_side on self
         self.num_elements_side = num_elements_side
+
+        # assign phi on self
+        self.phi = phi
 
         # increment num_elements_side as the following numpy commands operate in terms of vertices
         num_vertices_side = num_elements_side + 1
@@ -50,9 +58,14 @@ class Solver:
                         element_m, element_n
                     )
         elif 2 == part:
-            pass
+            print(self.get_element_center_point(0))
+            for element_m in range(num_elements_tot):
+                for element_n in range(num_elements_tot):
+                    pass
         elif 3 == part:
-            pass
+            for element_m in range(num_elements_tot):
+                for element_n in range(num_elements_tot):
+                    pass
         else:
             raise ValueError("Invalid PART, must be 1, 2 or 3")
 
@@ -64,33 +77,60 @@ class Solver:
         # solve linear system of equations
         self.c = solve(self.A, self.b)
 
-        # calculate total charge
-        print(self.element_area * sum(self.c) / 1.602e-19)
+        # convert self.c to charge density
+        charge_density = self.c / e
 
-        plotting_c = (
-            self.c.reshape((self.num_elements_side, self.num_elements_side)) / 1.602e-19
+        # calculate total charge
+        self.total_charge = self.element_area * sum(charge_density)
+
+        # print total charge out
+        print(
+            f"{self.num_elements_side}x{self.num_elements_side} Total Charge: {self.total_charge} [C]"
         )
 
-        plt.pcolormesh(self.X, self.Y, plotting_c)
-        plt.show()
+        # calculate capacitance
+        self.capacitance = self.total_charge / self.phi
+
+        # print out capacitance
+        print(
+            f"{self.num_elements_side}x{self.num_elements_side} Capacitance: {self.capacitance} [F]"
+        )
+
+        # reshape results for plotting
+        reshaped_charge = charge_density.reshape(
+            (self.num_elements_side, self.num_elements_side)
+        )
+
+        # plot charge distribution
+        plt.rcParams["text.usetex"] = True
+        fig, ax = plt.subplots(dpi=300, figsize=(5, 4))
+        mesh = ax.pcolormesh(
+            self.X,
+            self.Y,
+            reshaped_charge,
+            cmap="jet",
+            norm=LogNorm(vmin=10000000000, vmax=100000000000),
+        )
+        cbar = plt.colorbar(mesh)
+        fig.show()
 
     def part_1_a_assembler(self, element_m: int, element_n: int) -> float:
         """
-        calculates A_mn for MoM matrices
+        calculates A_mn for MoM matrices for part 1
         :param element_m: element m
         :param element_n: element n
         :return: A_mn
         """
         if element_m != element_n:
-            acc = (
+            amn = (
                 1
                 / (4 * pi * epsilon_0)
                 * self.element_area
                 / self.calc_element_center_differences(element_m, element_n)
             )
         else:
-            acc = 1 / (2 * epsilon_0) * sqrt(self.element_area / pi)
-        return acc
+            amn = 1 / (2 * epsilon_0) * sqrt(self.element_area / pi)
+        return amn
 
     def linear_to_cart_idx(self, element: int) -> tuple[int, int]:
         """
@@ -108,7 +148,7 @@ class Solver:
         top left nodes
         :param element_m: element m
         :param element_n: element n
-        :return: distance between the centerpoints of elements m and n
+        :return: distance between the center points of elements m and n
         """
         element_m_idx = self.linear_to_cart_idx(element_m)
         element_n_idx = self.linear_to_cart_idx(element_n)
@@ -116,4 +156,28 @@ class Solver:
         return sqrt(
             (self.dist_between_vertex * abs(element_m_idx[0] - element_n_idx[0])) ** 2
             + (self.dist_between_vertex * abs(element_m_idx[1] - element_n_idx[1])) ** 2
+        )
+
+    def part_2_a_assembler(self, element_m: int, element_n: int) -> float:
+        """
+        calculates A_mn for MoM matrices for part 2
+        :param element_m: element m
+        :param element_n: element n
+        :return: A_mn
+        """
+        # get
+
+        # calculate 1st term of A_mn
+
+        # add first part to second part of A_mn
+
+        # multiply by constant and return
+        pass
+
+    def get_element_center_point(self, element: int):
+        coords = self.linear_to_cart_idx(element)
+
+        return (
+            self.X[coords[0], coords[1]] + self.dist_between_vertex * 0.5,
+            self.Y[coords[0], coords[1]] + self.dist_between_vertex * 0.5,
         )
