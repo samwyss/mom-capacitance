@@ -80,32 +80,11 @@ class Solver:
             element % self.num_elements_side
         )
 
-    """
-    def calc_element_center_coords(
-        self,
-        element: int,
-    ) -> tuple[float, float]:
-        return (
-            (
-                self.X[self.linear_to_cart_idx(element + 1)]
-                - self.X[self.linear_to_cart_idx(element)]
-            )
-            * 0.5,
-            (
-                self.Y[self.linear_to_cart_idx(element + self.num_elements_side)]
-                - self.Y[self.linear_to_cart_idx(element)]
-            )
-            * 0.5,
-        )
-        """
-
     def calc_element_center_differences(self, element_m: int, element_n: int) -> float:
         element_m_idx = self.linear_to_cart_idx(element_m)
         element_n_idx = self.linear_to_cart_idx(element_n)
 
-        dist = sqrt(
+        return sqrt(
             (self.dist_between_vertex * abs(element_m_idx[0] - element_n_idx[0])) ** 2
             + (self.dist_between_vertex * abs(element_m_idx[1] - element_n_idx[1])) ** 2
         )
-
-        return dist

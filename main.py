@@ -2,7 +2,7 @@ from Solver import Solver
 
 
 def main():
-    solver = Solver(10, 1e-2, 1, 1)
+    solver = Solver(10, 1e-2, 1, 0.1)
     solver.solve()
 
 
