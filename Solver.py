@@ -6,6 +6,13 @@ import matplotlib.pyplot as plt
 
 class Solver:
     def __init__(self, num_elements_side: int, len_side: float, part: int, phi: float):
+        """
+        Solver constructor
+        :param num_elements_side: number of elements per side of grid
+        :param len_side: length of the side in meters
+        :param part: method by which to calculate A_mn from textbook
+        :param phi: potential of the plate
+        """
 
         # assign num_elements_side on self
         self.num_elements_side = num_elements_side
@@ -50,6 +57,10 @@ class Solver:
             raise ValueError("Invalid PART, must be 1, 2 or 3")
 
     def solve(self):
+        """
+        solves the system of equations set up in the Solver constructor
+        :return: None
+        """
         # solve linear system of equations
         self.c = solve(self.A, self.b)
 
@@ -64,6 +75,12 @@ class Solver:
         plt.show()
 
     def part_1_a_assembler(self, element_m: int, element_n: int) -> float:
+        """
+        calculates A_mn for MoM matrices
+        :param element_m: element m
+        :param element_n: element n
+        :return: A_mn
+        """
         if element_m != element_n:
             acc = (
                 1
@@ -76,11 +93,23 @@ class Solver:
         return acc
 
     def linear_to_cart_idx(self, element: int) -> tuple[int, int]:
+        """
+        converts a linear index to a cartesian grid
+        :param element: linearly indexed element
+        :return: cartesian coordinates of the linear index
+        """
         return int(floor(element / self.num_elements_side)), int(
             element % self.num_elements_side
         )
 
     def calc_element_center_differences(self, element_m: int, element_n: int) -> float:
+        """
+        calculates the difference in center point location of element m and element n which are represented by their
+        top left nodes
+        :param element_m: element m
+        :param element_n: element n
+        :return: distance between the centerpoints of elements m and n
+        """
         element_m_idx = self.linear_to_cart_idx(element_m)
         element_n_idx = self.linear_to_cart_idx(element_n)
 
