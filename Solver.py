@@ -77,11 +77,8 @@ class Solver:
         # solve linear system of equations
         self.c = solve(self.A, self.b)
 
-        # convert self.c to charge density
-        charge_density = self.c / e
-
         # calculate total charge
-        self.total_charge = self.element_area * sum(charge_density)
+        self.total_charge = self.element_area * sum(self.c)
 
         # print total charge out
         print(
@@ -97,7 +94,7 @@ class Solver:
         )
 
         # reshape results for plotting
-        reshaped_charge = charge_density.reshape(
+        reshaped_charge = self.c.reshape(
             (self.num_elements_side, self.num_elements_side)
         )
 
@@ -109,7 +106,7 @@ class Solver:
             self.Y,
             reshaped_charge,
             cmap="jet",
-            norm=LogNorm(vmin=10000000000, vmax=100000000000),
+            norm=LogNorm(vmin=1e-9, vmax=2e-8),
         )
         cbar = plt.colorbar(mesh)
         fig.show()
