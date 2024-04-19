@@ -1,4 +1,4 @@
-from numpy import linspace, meshgrid, ones, zeros, pi, sqrt, floor
+from numpy import linspace, meshgrid, ones, zeros, pi, sqrt, floor, log
 from scipy.constants import epsilon_0, e
 from numpy.linalg import solve
 import matplotlib.pyplot as plt
@@ -38,7 +38,7 @@ class Solver:
         self.X, self.Y = meshgrid(x, y)  # [m]
 
         # calculate the spacing between vertexes
-        self.dist_between_vertex = self.X[0, 0] - self.X[0, 1]  # [m]
+        self.dist_between_vertex = self.X[0, 1] - self.X[0, 0]  # [m]
 
         # calculate the area of each element
         self.element_area = self.dist_between_vertex**2  # [m^2]
@@ -58,10 +58,11 @@ class Solver:
                         element_m, element_n
                     )
         elif 2 == part:
-            print(self.get_element_center_point(0))
             for element_m in range(num_elements_tot):
                 for element_n in range(num_elements_tot):
-                    pass
+                    self.A[element_m, element_n] += self.part_2_a_assembler(
+                        element_m, element_n
+                    )
         elif 3 == part:
             for element_m in range(num_elements_tot):
                 for element_n in range(num_elements_tot):
@@ -162,19 +163,84 @@ class Solver:
         :param element_n: element n
         :return: A_mn
         """
-        # get
 
-        # calculate 1st term of A_mn
+        # calculate +distance_between_elements/2 term
+        amn = self.calc_element_m_minus_element_prime(
+            element_m, element_n, True, True
+        ) * log(
+            self.calc_element_m_minus_element_prime(element_m, element_n, False, True)
+            + self.calc_r(element_m, element_n, True)
+        ) + self.calc_element_m_minus_element_prime(
+            element_m, element_n, False, True
+        ) * log(
+            self.calc_element_m_minus_element_prime(element_m, element_n, True, True)
+            + self.calc_r(element_m, element_n, True)
+        )
 
-        # add first part to second part of A_mn
+        # subtract to calculate -distance_between_elements/2 term
+        amn -= self.calc_element_m_minus_element_prime(
+            element_m, element_n, True, False
+        ) * log(
+            self.calc_element_m_minus_element_prime(element_m, element_n, False, False)
+            + self.calc_r(element_m, element_n, False)
+        ) + self.calc_element_m_minus_element_prime(
+            element_m, element_n, False, False
+        ) * log(
+            self.calc_element_m_minus_element_prime(element_m, element_n, True, False)
+            + self.calc_r(element_m, element_n, False)
+        )
 
         # multiply by constant and return
-        pass
+        return amn * 1 / (4 * pi * epsilon_0)
 
     def get_element_center_point(self, element: int):
+        """
+        calculates the center point location of a linearly indexed element
+        :param element: linearly indexed element
+        :return: center point location of linearly indexed element
+        """
         coords = self.linear_to_cart_idx(element)
 
         return (
             self.X[coords[0], coords[1]] + self.dist_between_vertex * 0.5,
             self.Y[coords[0], coords[1]] + self.dist_between_vertex * 0.5,
         )
+
+    def calc_element_m_minus_element_n(
+        self, element_m: int, element_n: int, x_flag: bool
+    ) -> float:
+        """
+        calculates a component of element_m minus a component of element_n based on x_flag
+        :param element_m: element m
+        :param element_n: element n
+        :param x_flag: true-> use x component, false-> use y component
+        :return: difference in components
+        """
+
+        coords_m = self.get_element_center_point(element_m)
+        coords_n = self.get_element_center_point(element_n)
+
+        idx = 0 if x_flag else 1
+
+        return coords_m[idx] - coords_n[idx]
+
+    def calc_element_m_minus_element_prime(
+        self, element_m: int, element_n: int, x_flag: bool, add_flag: bool
+    ) -> float:
+
+        sign = -1 if add_flag else 1
+
+        return (
+            self.calc_element_m_minus_element_n(element_m, element_n, x_flag)
+            + sign * self.dist_between_vertex * 0.5
+        )
+
+    def calc_r(self, element_m: int, element_n: int, add_flag: bool):
+        diff_x = self.calc_element_m_minus_element_prime(
+            element_m, element_n, True, add_flag
+        )
+        diff_y = self.calc_element_m_minus_element_prime(
+            element_m, element_n, False, add_flag
+        )
+
+        return sqrt(diff_x**2 + diff_y**2)
