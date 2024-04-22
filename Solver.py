@@ -136,8 +136,8 @@ class Solver:
         :param element: linearly indexed element
         :return: cartesian coordinates of the linear index
         """
-        return int(floor(element / self.num_elements_side)), int(
-            element % self.num_elements_side
+        return int(element % self.num_elements_side), int(
+            floor(element / self.num_elements_side)
         )
 
     def calc_element_center_differences(self, element_m: int, element_n: int) -> float:
@@ -164,31 +164,44 @@ class Solver:
         :return: A_mn
         """
 
-        # calculate +distance_between_elements/2 term
-        amn = self.calc_element_m_minus_element_prime(
-            element_m, element_n, True, True
-        ) * log(
-            self.calc_element_m_minus_element_prime(element_m, element_n, False, True)
-            + self.calc_r(element_m, element_n, True)
-        ) + self.calc_element_m_minus_element_prime(
-            element_m, element_n, False, True
-        ) * log(
-            self.calc_element_m_minus_element_prime(element_m, element_n, True, True)
-            + self.calc_r(element_m, element_n, True)
-        )
+        # ensure accumulator is initialized to zero
+        amn = 0
 
-        # subtract to calculate -distance_between_elements/2 term
-        amn -= self.calc_element_m_minus_element_prime(
-            element_m, element_n, True, False
-        ) * log(
-            self.calc_element_m_minus_element_prime(element_m, element_n, False, False)
-            + self.calc_r(element_m, element_n, False)
-        ) + self.calc_element_m_minus_element_prime(
-            element_m, element_n, False, False
-        ) * log(
-            self.calc_element_m_minus_element_prime(element_m, element_n, True, False)
-            + self.calc_r(element_m, element_n, False)
-        )
+        # get centerpoint of elements m and n
+        xm, ym = self.get_element_center_point(element_m)
+        xn, yn = self.get_element_center_point(element_n)
+
+        # get local subgrid of "prime" variable
+        xp = [
+            xn - self.dist_between_vertex * 0.5,
+            xn + self.dist_between_vertex * 0.5,
+        ]
+        yp = [
+            yn - self.dist_between_vertex * 0.5,
+            yn + self.dist_between_vertex * 0.5,
+        ]
+
+        # accumulate on amn
+        for i in range(2):
+            for j in range(2):
+                # determine the sign of the term
+                sign = 1 if (i + j) % 2 == 0 else -1
+
+                # calculate R
+                r = sqrt((xm - xp[i]) ** 2 + (ym - yp[j]) ** 2)
+
+                term_1 = 0
+                term_2 = 0
+                if ((ym - yp[j]) + r) != 0:
+                    # calculate first term contributions
+                    term_1 = (xm - xp[i]) * log((ym - yp[j]) + r)
+
+                if ((xm - xp[i]) + r) != 0:
+                    # calculate second term contributions
+                    term_2 = (ym - yp[j]) * log((xm - xp[i]) + r)
+
+                # accumulate on amn
+                amn += sign * (term_1 + term_2)
 
         # multiply by constant and return
         return amn * 1 / (4 * pi * epsilon_0)

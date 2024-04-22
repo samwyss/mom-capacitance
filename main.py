@@ -8,9 +8,7 @@ def main():
     # part 1
     """
     print("Part 1")
-    """
     solver_1_10 = Solver(10, SIDE_LEN, 1, PHI)
-    """
     solver_1_20 = Solver(20, SIDE_LEN, 1, PHI)
     solver_1_30 = Solver(30, SIDE_LEN, 1, PHI)
     solver_1_10.solve()
