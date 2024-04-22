@@ -190,14 +190,16 @@ class Solver:
                 # calculate R
                 r = sqrt((xm - xp[i]) ** 2 + (ym - yp[j]) ** 2)
 
+                # initialize values in case the log term evaluates to zero
                 term_1 = 0
                 term_2 = 0
+
+                # calculate first term contributions
                 if ((ym - yp[j]) + r) != 0:
-                    # calculate first term contributions
                     term_1 = (xm - xp[i]) * log((ym - yp[j]) + r)
 
+                # calculate second term contributions
                 if ((xm - xp[i]) + r) != 0:
-                    # calculate second term contributions
                     term_2 = (ym - yp[j]) * log((xm - xp[i]) + r)
 
                 # accumulate on amn
@@ -218,42 +220,3 @@ class Solver:
             self.X[coords[0], coords[1]] + self.dist_between_vertex * 0.5,
             self.Y[coords[0], coords[1]] + self.dist_between_vertex * 0.5,
         )
-
-    def calc_element_m_minus_element_n(
-        self, element_m: int, element_n: int, x_flag: bool
-    ) -> float:
-        """
-        calculates a component of element_m minus a component of element_n based on x_flag
-        :param element_m: element m
-        :param element_n: element n
-        :param x_flag: true-> use x component, false-> use y component
-        :return: difference in components
-        """
-
-        coords_m = self.get_element_center_point(element_m)
-        coords_n = self.get_element_center_point(element_n)
-
-        idx = 0 if x_flag else 1
-
-        return coords_m[idx] - coords_n[idx]
-
-    def calc_element_m_minus_element_prime(
-        self, element_m: int, element_n: int, x_flag: bool, add_flag: bool
-    ) -> float:
-
-        sign = -1 if add_flag else 1
-
-        return (
-            self.calc_element_m_minus_element_n(element_m, element_n, x_flag)
-            + sign * self.dist_between_vertex * 0.5
-        )
-
-    def calc_r(self, element_m: int, element_n: int, add_flag: bool):
-        diff_x = self.calc_element_m_minus_element_prime(
-            element_m, element_n, True, add_flag
-        )
-        diff_y = self.calc_element_m_minus_element_prime(
-            element_m, element_n, False, add_flag
-        )
-
-        return sqrt(diff_x**2 + diff_y**2)
