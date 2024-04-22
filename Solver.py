@@ -190,17 +190,11 @@ class Solver:
                 # calculate R
                 r = sqrt((xm - xp[i]) ** 2 + (ym - yp[j]) ** 2)
 
-                # initialize values in case the log term evaluates to zero
-                term_1 = 0
-                term_2 = 0
-
                 # calculate first term contributions
-                if ((ym - yp[j]) + r) != 0:
-                    term_1 = (xm - xp[i]) * log((ym - yp[j]) + r)
+                term_1 = (xm - xp[i]) * log((ym - yp[j]) + r)
 
                 # calculate second term contributions
-                if ((xm - xp[i]) + r) != 0:
-                    term_2 = (ym - yp[j]) * log((xm - xp[i]) + r)
+                term_2 = (ym - yp[j]) * log((xm - xp[i]) + r)
 
                 # accumulate on amn
                 amn += sign * (term_1 + term_2)
