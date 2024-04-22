@@ -54,19 +54,24 @@ class Solver:
         if 1 == part:
             for element_m in range(num_elements_tot):
                 for element_n in range(num_elements_tot):
-                    self.A[element_m, element_n] += self.part_1_a_assembler(
+                    self.A[element_m, element_n] = self.part_1_a_assembler(
                         element_m, element_n
                     )
         elif 2 == part:
             for element_m in range(num_elements_tot):
                 for element_n in range(num_elements_tot):
-                    self.A[element_m, element_n] += self.part_2_a_assembler(
+                    self.A[element_m, element_n] = self.part_2_a_assembler(
                         element_m, element_n
                     )
         elif 3 == part:
             for element_m in range(num_elements_tot):
                 for element_n in range(num_elements_tot):
-                    pass
+                    self.A[element_m, element_n] = self.part_3_a_assembler(
+                        element_m, element_n
+                    )
+
+            # scale b
+            self.b *= self.element_area
         else:
             raise ValueError("Invalid PART, must be 1, 2 or 3")
 
@@ -182,19 +187,19 @@ class Solver:
         ]
 
         # accumulate on amn
-        for i in range(2):
-            for j in range(2):
-                # determine the sign of the term
-                sign = 1 if (i + j) % 2 == 0 else -1
+        for xn_idx in range(2):
+            for yn_idx in range(2):
+                # determine the sign of the term (add on both high, else subtract)
+                sign = (-1) ** (xn_idx + yn_idx)
 
                 # calculate R
-                r = sqrt((xm - xp[i]) ** 2 + (ym - yp[j]) ** 2)
+                r = sqrt((xm - xp[xn_idx]) ** 2 + (ym - yp[yn_idx]) ** 2)
 
                 # calculate first term contributions
-                term_1 = (xm - xp[i]) * log((ym - yp[j]) + r)
+                term_1 = (xm - xp[xn_idx]) * log((ym - yp[yn_idx]) + r)
 
                 # calculate second term contributions
-                term_2 = (ym - yp[j]) * log((xm - xp[i]) + r)
+                term_2 = (ym - yp[yn_idx]) * log((xm - xp[xn_idx]) + r)
 
                 # accumulate on amn
                 amn += sign * (term_1 + term_2)
@@ -214,3 +219,93 @@ class Solver:
             self.X[coords[0], coords[1]] + self.dist_between_vertex * 0.5,
             self.Y[coords[0], coords[1]] + self.dist_between_vertex * 0.5,
         )
+
+    def part_3_a_assembler(self, element_m: int, element_n: int) -> float:
+        """
+        calculates A_mn for MoM matrices for part 3
+        :param element_m: element m
+        :param element_n: element n
+        :return: A_mn
+        """
+
+        # ensure accumulator is initialized to zero
+        amn = 0
+
+        # get centerpoint of elements m and n
+        xm, ym = self.get_element_center_point(element_m)
+        xn, yn = self.get_element_center_point(element_n)
+
+        # get local subgrid of "prime" variable
+        xp = [
+            xn - self.dist_between_vertex * 0.5,
+            xn + self.dist_between_vertex * 0.5,
+        ]
+        yp = [
+            yn - self.dist_between_vertex * 0.5,
+            yn + self.dist_between_vertex * 0.5,
+        ]
+
+        # get local subgrid of x and y values
+        x = [
+            xm - self.dist_between_vertex * 0.5,
+            xm + self.dist_between_vertex * 0.5,
+        ]
+        y = [
+            ym - self.dist_between_vertex * 0.5,
+            ym + self.dist_between_vertex * 0.5,
+        ]
+
+        # accumulate on amn
+        for xn_idx in range(2):
+            for yn_idx in range(2):
+                for xm_idx in range(2):
+                    for ym_idx in range(2):
+                        # determine the term sign (if both are high we add, else subtract)
+                        sign = (-1) ** (xn_idx + yn_idx + xm_idx + ym_idx)
+
+                        # calculate r
+                        r = sqrt(
+                            (x[xm_idx] - xp[xn_idx]) ** 2
+                            + (y[ym_idx] - yp[yn_idx]) ** 2
+                        )
+
+                        # calculate first term
+                        arg1 = (y[ym_idx] - yp[yn_idx]) + r
+                        if arg1 != 0:
+                            term_1 = (
+                                (
+                                    (x[xm_idx] - xp[xn_idx]) ** 2
+                                    * (y[ym_idx] - yp[yn_idx])
+                                )
+                                / 2
+                                * log((y[ym_idx] - yp[yn_idx]) + r)
+                            )
+                        else:
+                            term_1 = 0
+
+                        # calculate second term
+                        arg2 = (x[xm_idx] - xp[xn_idx]) + r
+                        if arg2 != 0:
+                            term_2 = (
+                                (
+                                    (x[xm_idx] - xp[xn_idx])
+                                    * (y[ym_idx] - yp[yn_idx]) ** 2
+                                )
+                                / 2
+                                * log((x[xm_idx] - xp[xn_idx]) + r)
+                            )
+                        else:
+                            term_2 = 0
+
+                        # calculate third term
+                        term_3 = (
+                            ((x[xm_idx] - xp[xn_idx]) * (y[ym_idx] - yp[yn_idx]))
+                            / 4
+                            * ((x[xm_idx] - xp[xn_idx]) + (y[ym_idx] - yp[yn_idx]))
+                        )
+
+                        # accumulate on amn
+                        amn += sign * (term_1 + term_2 - term_3 - r**3 / 6)
+
+            # multiply by constant and return
+            return amn * 1 / (4 * pi * epsilon_0)

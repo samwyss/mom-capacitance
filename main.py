@@ -6,6 +6,7 @@ SIDE_LEN = 1e-2
 
 def main():
     # part 1
+    """
     print("Part 1")
     solver_1_10 = Solver(10, SIDE_LEN, 1, PHI)
     solver_1_20 = Solver(20, SIDE_LEN, 1, PHI)
@@ -24,6 +25,11 @@ def main():
     solver_2_20.solve()
     solver_2_30.solve()
     print("\n")
+    """
+
+    # part 3
+    solver_3_10 = Solver(10, SIDE_LEN, 3, PHI)
+    solver_3_10.solve()
 
 
 # call main function after declaration
