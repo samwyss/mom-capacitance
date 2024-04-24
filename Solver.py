@@ -25,6 +25,9 @@ class Solver:
         # assign phi on self
         self.phi = phi
 
+        # assign part on self
+        self.part = part
+
         # increment num_elements_side as the following numpy commands operate in terms of vertices
         num_vertices_side = num_elements_side + 1
 
@@ -235,77 +238,43 @@ class Solver:
         xm, ym = self.get_element_center_point(element_m)
         xn, yn = self.get_element_center_point(element_n)
 
-        # get local subgrid of "prime" variable
-        xp = [
-            xn - self.dist_between_vertex * 0.5,
-            xn + self.dist_between_vertex * 0.5,
-        ]
-        yp = [
-            yn - self.dist_between_vertex * 0.5,
-            yn + self.dist_between_vertex * 0.5,
-        ]
-
-        # get local subgrid of x and y values
-        x = [
-            xm - self.dist_between_vertex * 0.5,
-            xm + self.dist_between_vertex * 0.5,
-        ]
-        y = [
-            ym - self.dist_between_vertex * 0.5,
-            ym + self.dist_between_vertex * 0.5,
-        ]
-
         # accumulate on amn
-        for xn_idx in range(2):
-            for yn_idx in range(2):
-                for xm_idx in range(2):
-                    for ym_idx in range(2):
-                        # determine the term sign (if both are high we add, else subtract)
-                        sign = (-1) ** (xn_idx + yn_idx + xm_idx + ym_idx)
+        for xm_idx in range(2):
+            for ym_idx in range(2):
+                for xn_idx in range(2):
+                    for yn_idx in range(2):
+
+                        # determine values
+                        x = xm + (-1) ** (xm_idx + 1) * self.dist_between_vertex * 0.5
+                        y = ym + (-1) ** (ym_idx + 1) * self.dist_between_vertex * 0.5
+                        xp = xn + (-1) ** (xn_idx + 1) * self.dist_between_vertex * 0.5
+                        yp = yn + (-1) ** (yn_idx + 1) * self.dist_between_vertex * 0.5
+
+                        # determine sign
+                        sign = (-1) ** (xm_idx + ym_idx + xn_idx + yn_idx)
 
                         # calculate r
-                        r = sqrt(
-                            (x[xm_idx] - xp[xn_idx]) ** 2
-                            + (y[ym_idx] - yp[yn_idx]) ** 2
-                        )
+                        r = sqrt((x - xp) ** 2 + (y - yp) ** 2)
 
                         # calculate first term
-                        arg1 = (y[ym_idx] - yp[yn_idx]) + r
+                        arg1 = (y - yp) + r
                         if arg1 != 0:
-                            term_1 = (
-                                (
-                                    (x[xm_idx] - xp[xn_idx]) ** 2
-                                    * (y[ym_idx] - yp[yn_idx])
-                                )
-                                / 2
-                                * log((y[ym_idx] - yp[yn_idx]) + r)
-                            )
+                            term_1 = ((x - xp) ** 2 * (y - yp)) / 2 * log(arg1)
                         else:
                             term_1 = 0
 
                         # calculate second term
-                        arg2 = (x[xm_idx] - xp[xn_idx]) + r
+                        arg2 = (x - xp) + r
                         if arg2 != 0:
-                            term_2 = (
-                                (
-                                    (x[xm_idx] - xp[xn_idx])
-                                    * (y[ym_idx] - yp[yn_idx]) ** 2
-                                )
-                                / 2
-                                * log((x[xm_idx] - xp[xn_idx]) + r)
-                            )
+                            term_2 = ((x - xp) * (y - yp) ** 2) / 2 * log(arg2)
                         else:
                             term_2 = 0
 
                         # calculate third term
-                        term_3 = (
-                            ((x[xm_idx] - xp[xn_idx]) * (y[ym_idx] - yp[yn_idx]))
-                            / 4
-                            * ((x[xm_idx] - xp[xn_idx]) + (y[ym_idx] - yp[yn_idx]))
-                        )
+                        term_3 = ((x - xp) * (y - yp)) / 4 * ((x - xp) + (y - yp))
 
                         # accumulate on amn
                         amn += sign * (term_1 + term_2 - term_3 - r**3 / 6)
 
-            # multiply by constant and return
-            return amn * 1 / (4 * pi * epsilon_0)
+        # multiply by constant and return
+        return amn * 1 / (4 * pi * epsilon_0)
