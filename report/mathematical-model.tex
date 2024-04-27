@@ -1,0 +1,22 @@
+\section{Mathematical Model}
+\label{sec:mathmod}
+
+To model these systems \textit{in silico}, an appropriate mathematical model must first be derived from Maxwell's Equations. The development of said model is arranged as follows. Section \ref{subsub:eie} contains the derivation of the EIE from Maxwell's Equations followed by surface element discretization into a simultaneous set of equations. Section \ref{subsub:mat-approx} outlines three formulations of the Systems matrix $A$ starting with elements approximated as circles, an exact solution, and finally subdomain collocation. 
+
+\subsubsection{The Electrostatic Integral Equation (EIE)}
+\label{subsub:eie}
+From basic electrostatics, the integral form of Gauss's Equation over some surface $S$ is as follows
+\begin{align}
+    \iint_S\epsilon_0^{-1}g(\textbf{r},\textbf{r'})\rho_s(\textbf{r'})dS'=\Phi(r)
+\end{align}
+where $\epsilon_0$ is the permittivity of free space, $\rho_s(\textbf{r'})$ is the surface charge density, $\Phi(r)$ is the electrostatic potential, and $g(\textbf{r},\textbf{r'})$ is the corresponding Green's function (integration kernel)
+\begin{align}
+    g(\textbf{r},\textbf{r'})=\frac{1}{4\pi|\textbf{r}-\textbf{r'}|}
+\end{align}
+
+\subsubsection{System Matrix Approximations}
+\label{subsub:mat-approx}
+
+
+
+
