@@ -26,16 +26,4 @@ T.~E. Roth, \emph{ECE 61800 Lecture Notes}.\hskip 1em plus 0.5em minus 0.4em\rel
 \bibitem{jin2011theory}
 J.-M. Jin, \emph{Theory and Computation of Electromagnetic Fields}.\hskip 1em plus 0.5em minus 0.4em\relax John Wiley \& Sons, 2011.
 
-\bibitem{cubit}
-{Coreform LLC}, ``Coreform cubit,'' \url{https://coreform.com/products/coreform-cubit/}, 2024, [Online; accessed 26-March-2024].
-
-\bibitem{everythingrf}
-{Everything RF contributors}, ``Rectangular waveguide sizes,'' \url{https://www.everythingrf.com/tech-resources/waveguides-sizes}, 2021, [Online; accessed 28-Feburary-2024].
-
-\bibitem{pozar2011microwave}
-D.~M. Pozar, \emph{Microwave Engineering}.\hskip 1em plus 0.5em minus 0.4em\relax John Wiley \& Sons, 2011.
-
-\bibitem{cadencecircular}
-{Cadence System Analysis}, ``An introduction to circular waveguide modes,'' \url{https://resources.system-analysis.cadence.com/blog/msa2021-an-introduction-to-circular-waveguide-modes}, [Online; accessed 27-March-2024].
-
 \end{thebibliography}
