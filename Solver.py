@@ -4,6 +4,7 @@ from numpy.linalg import solve
 import matplotlib.pyplot as plt
 from matplotlib.colors import LogNorm
 
+C = 1e-100
 
 class Solver:
     def __init__(self, num_elements_side: int, len_side: float, part: int, phi: float):
@@ -15,18 +16,11 @@ class Solver:
         :param phi: potential of the plate
         """
 
-        # instantiate self.capacitance and self.total_charge to zero
-        self.capacitance = 0.0
-        self.total_charge = 0.0
-
         # assign num_elements_side on self
         self.num_elements_side = num_elements_side
 
         # assign phi on self
         self.phi = phi
-
-        # assign part on self
-        self.part = part
 
         # increment num_elements_side as the following numpy commands operate in terms of vertices
         num_vertices_side = num_elements_side + 1
@@ -87,19 +81,14 @@ class Solver:
         self.c = solve(self.A, self.b)
 
         # calculate total charge
-        self.total_charge = self.element_area * sum(self.c)
-
-        # print total charge out
-        print(
-            f"{self.num_elements_side}x{self.num_elements_side} Total Charge: {self.total_charge} [C]"
-        )
+        total_charge = self.element_area * sum(self.c)
 
         # calculate capacitance
-        self.capacitance = self.total_charge / self.phi
+        capacitance = total_charge / self.phi
 
         # print out capacitance
         print(
-            f"{self.num_elements_side}x{self.num_elements_side} Capacitance: {self.capacitance} [F]"
+            f"{self.num_elements_side}x{self.num_elements_side} Capacitance: {capacitance} [F]"
         )
 
         # reshape results for plotting
@@ -109,7 +98,7 @@ class Solver:
 
         # plot charge distribution
         plt.rcParams["text.usetex"] = True
-        fig, ax = plt.subplots(dpi=300, figsize=(5, 4))
+        fig, ax = plt.subplots(dpi=600, figsize=(5, 4))
         mesh = ax.pcolormesh(
             self.X,
             self.Y,
@@ -117,7 +106,11 @@ class Solver:
             cmap="jet",
             norm=LogNorm(vmin=1e-9, vmax=2e-8),
         )
-        cbar = plt.colorbar(mesh)
+
+        ax.set_xlabel(r"x-position [$m$]")
+        ax.set_ylabel(r"y-position [$m$]")
+
+        cbar = plt.colorbar(mesh, label=r"Charge Density, $\rho_{s}$ [$C/m^2$]")
         fig.show()
 
     def part_1_a_assembler(self, element_m: int, element_n: int) -> float:
@@ -257,18 +250,10 @@ class Solver:
                         r = sqrt((x - xp) ** 2 + (y - yp) ** 2)
 
                         # calculate first term
-                        arg1 = (y - yp) + r
-                        if arg1 != 0:
-                            term_1 = ((x - xp) ** 2 * (y - yp)) / 2 * log(arg1)
-                        else:
-                            term_1 = 0
+                        term_1 = ((x - xp) ** 2 * (y - yp)) / 2 * log((y - yp) + r + C)
 
                         # calculate second term
-                        arg2 = (x - xp) + r
-                        if arg2 != 0:
-                            term_2 = ((x - xp) * (y - yp) ** 2) / 2 * log(arg2)
-                        else:
-                            term_2 = 0
+                        term_2 = ((x - xp) * (y - yp) ** 2) / 2 * log((x - xp) + r + C)
 
                         # calculate third term
                         term_3 = ((x - xp) * (y - yp)) / 4 * ((x - xp) + (y - yp))
