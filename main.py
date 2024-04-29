@@ -29,7 +29,7 @@ def main():
     solver_1_70.solve()
     solver_1_80.solve()
     solver_1_90.solve()
-    solver_1_100.solve()
+    solver_1_100.solve()   
     """
     print("\n")
 

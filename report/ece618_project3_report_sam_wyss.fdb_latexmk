@@ -1,13 +1,13 @@
 # Fdb version 4
-["bibtex ece618_project3_report_sam_wyss"] 1714331358 "ece618_project3_report_sam_wyss.aux" "ece618_project3_report_sam_wyss.bbl" "ece618_project3_report_sam_wyss" 1714331525 0
+["bibtex ece618_project3_report_sam_wyss"] 1714351304 "ece618_project3_report_sam_wyss.aux" "ece618_project3_report_sam_wyss.bbl" "ece618_project3_report_sam_wyss" 1714351453 0
   "./IEEEtran.bst" 1714233148 57748 7c8250ecf02814ce6ddc0cdbb63df1dd ""
   "./cem_class_example_bib.bib" 1714233148 8490 9f5e8b35b91835e1a441f14c04d2db1d ""
-  "ece618_project3_report_sam_wyss.aux" 1714331524 3507 187eb488b3db1ab785f6efbc2532263d "pdflatex"
+  "ece618_project3_report_sam_wyss.aux" 1714351453 3728 ec812f5338c2ff9baa58b7c730e78005 "pdflatex"
   (generated)
   "ece618_project3_report_sam_wyss.bbl"
   "ece618_project3_report_sam_wyss.blg"
   (rewritten before read)
-["pdflatex"] 1714331523 "w:/mom-capacitance/report/ece618_project3_report_sam_wyss.tex" "ece618_project3_report_sam_wyss.pdf" "ece618_project3_report_sam_wyss" 1714331525 0
+["pdflatex"] 1714351451 "w:/mom-capacitance/report/ece618_project3_report_sam_wyss.tex" "ece618_project3_report_sam_wyss.pdf" "ece618_project3_report_sam_wyss" 1714351453 0
   "IEEEtran.cls" 1714233148 276163 5b8c27844c9c11d4ad81e78fc081963e ""
   "c:/texlive/2023/texmf-dist/fonts/enc/dvips/base/8r.enc" 1690932584 4850 80dc9bab7f31fb78a000ccfed0e27cab ""
   "c:/texlive/2023/texmf-dist/fonts/map/fontname/texfonts.map" 1690933009 3524 cb3e574dea2d1052e39280babc910dc8 ""
@@ -129,17 +129,17 @@
   "c:/texlive/2023/texmf-var/web2c/pdftex/pdflatex.fmt" 1690936874 8172444 d436c85a7b78452b356caae390bc8948 ""
   "c:/texlive/2023/texmf.cnf" 1690936804 713 e69b156964470283e0530f5060668171 ""
   "conclusion.tex" 1714233148 1920 2333c08f6cebab7d333d6a2a7baeaf41 ""
-  "ece618_project3_report_sam_wyss.aux" 1714331524 3507 187eb488b3db1ab785f6efbc2532263d "pdflatex"
-  "ece618_project3_report_sam_wyss.bbl" 1714331359 1166 4feeeef1934a41a00832280d137f19bc "bibtex ece618_project3_report_sam_wyss"
-  "ece618_project3_report_sam_wyss.tex" 1714237589 4027 e85a483729923247a6bc8f11b889b4f5 ""
+  "ece618_project3_report_sam_wyss.aux" 1714351453 3728 ec812f5338c2ff9baa58b7c730e78005 "pdflatex"
+  "ece618_project3_report_sam_wyss.bbl" 1714351304 1166 4feeeef1934a41a00832280d137f19bc "bibtex ece618_project3_report_sam_wyss"
+  "ece618_project3_report_sam_wyss.tex" 1714349480 4079 db75f512ffe2273bcf0823c87f31e846 ""
   "figures/conv.png" 1714330273 152176 52ede35c19bb72cc187d1995beea6921 ""
   "figures/subd_10.png" 1714330254 105404 63fee42800e2ad391e32e9b8bdbb0eb4 ""
   "figures/subd_20.png" 1714330302 110717 214da90074d0f804df97a9d9a210452c ""
   "figures/subd_30.png" 1714330290 112084 d4e9d7f92290a0771d43b25436b67097 ""
-  "intro.tex" 1714242473 2261 d4f1c1e90aeddc70d68b4d64a9b1ff02 ""
-  "mathematical-model.tex" 1714327668 7980 53f80d3ef59a554dfb0f479eec781914 ""
-  "numerical-results.tex" 1714331522 2760 c5228b2143e664d2eb6d1dd0cf51dc7d ""
-  "w:/mom-capacitance/report/ece618_project3_report_sam_wyss.tex" 1714237589 4027 e85a483729923247a6bc8f11b889b4f5 ""
+  "intro.tex" 1714349825 2319 ba012d43149a338695b7a8a7a1733032 ""
+  "mathematical-model.tex" 1714351451 8255 92f19dc413880a24e4ae15afb10b008e ""
+  "numerical-results.tex" 1714331562 2760 c5228b2143e664d2eb6d1dd0cf51dc7d ""
+  "w:/mom-capacitance/report/ece618_project3_report_sam_wyss.tex" 1714349480 4079 db75f512ffe2273bcf0823c87f31e846 ""
   (generated)
   "ece618_project3_report_sam_wyss.aux"
   "ece618_project3_report_sam_wyss.log"
