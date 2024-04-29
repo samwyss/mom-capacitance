@@ -7,7 +7,8 @@
 \providecommand{\BIBentrySTDinterwordspacing}{\spaceskip=0pt\relax}
 \providecommand{\BIBentryALTinterwordstretchfactor}{4}
 \providecommand{\BIBentryALTinterwordspacing}{\spaceskip=\fontdimen2\font plus
-\BIBentryALTinterwordstretchfactor\fontdimen3\font minus \fontdimen4\font\relax}
+\BIBentryALTinterwordstretchfactor\fontdimen3\font minus
+  \fontdimen4\font\relax}
 \providecommand{\BIBforeignlanguage}[2]{{%
 \expandafter\ifx\csname l@#1\endcsname\relax
 \typeout{** WARNING: IEEEtran.bst: No hyphenation pattern has been}%
@@ -21,9 +22,15 @@
 \BIBdecl
 
 \bibitem{rothlecnotes}
-T.~E. Roth, \emph{ECE 61800 Lecture Notes}.\hskip 1em plus 0.5em minus 0.4em\relax Purdue University, 2024.
+T.~E. Roth, \emph{ECE 61800 Lecture Notes}.\hskip 1em plus 0.5em minus
+  0.4em\relax Purdue University, 2024.
 
 \bibitem{jin2011theory}
-J.-M. Jin, \emph{Theory and Computation of Electromagnetic Fields}.\hskip 1em plus 0.5em minus 0.4em\relax John Wiley \& Sons, 2011.
+J.-M. Jin, \emph{Theory and Computation of Electromagnetic Fields}.\hskip 1em
+  plus 0.5em minus 0.4em\relax John Wiley \& Sons, 2011.
+
+\bibitem{randomwalk}
+H.~Wintle, ``The capacitance of the cube and square plate by random walk
+  methods,'' \emph{Journal of Electrostatics}, vol.~62, no. 51-62, 2004.
 
 \end{thebibliography}

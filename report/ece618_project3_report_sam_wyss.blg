@@ -1,4 +1,4 @@
-This is BibTeX, Version 0.99d (TeX Live 2023)
+This is BibTeX, Version 0.99d (TeX Live 2022)
 Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
 The top-level auxiliary file: ece618_project3_report_sam_wyss.aux
 The style file: IEEEtran.bst
@@ -13,44 +13,44 @@ Database file #1: cem_class_example_bib.bib
 -- See the "IEEEtran_bst_HOWTO.pdf" manual for usage information.
 
 Done.
-You've used 2 entries,
+You've used 3 entries,
             4087 wiz_defined-function locations,
-            831 strings with 7519 characters,
-and the built_in function-call counts, 770 in all, are:
-= -- 43
-> -- 8
-< -- 0
-+ -- 4
-- -- 2
-* -- 37
-:= -- 145
-add.period$ -- 4
-call.type$ -- 2
-change.case$ -- 0
+            838 strings with 7643 characters,
+and the built_in function-call counts, 1208 in all, are:
+= -- 84
+> -- 12
+< -- 2
++ -- 6
+- -- 3
+* -- 57
+:= -- 232
+add.period$ -- 6
+call.type$ -- 3
+change.case$ -- 1
 chr.to.int$ -- 0
-cite$ -- 2
-duplicate$ -- 54
-empty$ -- 93
-format.name$ -- 2
-if$ -- 162
+cite$ -- 3
+duplicate$ -- 93
+empty$ -- 130
+format.name$ -- 3
+if$ -- 259
 int.to.chr$ -- 0
-int.to.str$ -- 2
-missing$ -- 10
-newline$ -- 29
-num.names$ -- 2
-pop$ -- 32
+int.to.str$ -- 3
+missing$ -- 17
+newline$ -- 32
+num.names$ -- 3
+pop$ -- 43
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 2
-skip$ -- 60
+skip$ -- 97
 stack$ -- 0
-substring$ -- 0
-swap$ -- 26
-text.length$ -- 0
+substring$ -- 1
+swap$ -- 52
+text.length$ -- 2
 text.prefix$ -- 0
 top$ -- 5
-type$ -- 2
+type$ -- 3
 warning$ -- 0
-while$ -- 2
-width$ -- 3
-write$ -- 36
+while$ -- 3
+width$ -- 4
+write$ -- 46
