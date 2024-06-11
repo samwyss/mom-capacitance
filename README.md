@@ -1,6 +1,6 @@
 # mom-capacitance
 
-A 2D Method of Moments square parallel plate capacitance solver for a graduate CEM course offered at Purdue University.
+A 2D Method of Moments (MoM) square parallel plate capacitance solver for a graduate CEM course offered at Purdue University.
 At the request of the instructor, the course details and project report have been removed from this repository.
 Please reach out if you are interested in the course details and project report.
 
