@@ -1,10 +1,11 @@
-from numpy import linspace, meshgrid, ones, zeros, pi, sqrt, floor, log
-from scipy.constants import epsilon_0, e
-from numpy.linalg import solve
 import matplotlib.pyplot as plt
 from matplotlib.colors import LogNorm
+from numpy import linspace, meshgrid, ones, zeros, pi, sqrt, floor, log
+from numpy.linalg import solve
+from scipy.constants import epsilon_0
 
 C = 1e-100
+
 
 class Solver:
     def __init__(self, num_elements_side: int, len_side: float, part: int, phi: float):
@@ -26,7 +27,7 @@ class Solver:
         num_vertices_side = num_elements_side + 1
 
         # calculate the total number of elements
-        num_elements_tot = num_elements_side**2
+        num_elements_tot = num_elements_side ** 2
 
         # create grid
         # NOTE: for this simple structured grid, all element numbers will be indexed by their upper right node corner
@@ -38,7 +39,7 @@ class Solver:
         self.dist_between_vertex = self.X[0, 1] - self.X[0, 0]  # [m]
 
         # calculate the area of each element
-        self.element_area = self.dist_between_vertex**2  # [m^2]
+        self.element_area = self.dist_between_vertex ** 2  # [m^2]
 
         # create MoM matrices
         self.b = phi * ones(
@@ -88,7 +89,7 @@ class Solver:
 
         # print out capacitance
         print(
-            f"{self.num_elements_side}x{self.num_elements_side} Capacitance: {capacitance} [F]"
+            f"Method of Moments {self.num_elements_side}x{self.num_elements_side} Grid Simulated Capacitance: {capacitance} [F]"
         )
 
         # reshape results for plotting
@@ -122,10 +123,10 @@ class Solver:
         """
         if element_m != element_n:
             amn = (
-                1
-                / (4 * pi * epsilon_0)
-                * self.element_area
-                / self.calc_element_center_differences(element_m, element_n)
+                    1
+                    / (4 * pi * epsilon_0)
+                    * self.element_area
+                    / self.calc_element_center_differences(element_m, element_n)
             )
         else:
             amn = 1 / (2 * epsilon_0) * sqrt(self.element_area / pi)
@@ -175,7 +176,6 @@ class Solver:
         # accumulate on amn
         for xn_idx in range(2):
             for yn_idx in range(2):
-
                 # get local subgrid of "prime" variable
                 xp = xn + (-1) ** (xn_idx + 1) * self.dist_between_vertex * 0.5
                 yp = yn + (-1) ** (yn_idx + 1) * self.dist_between_vertex * 0.5
@@ -231,7 +231,6 @@ class Solver:
             for ym_idx in range(2):
                 for xn_idx in range(2):
                     for yn_idx in range(2):
-
                         # determine values
                         x = xm + (-1) ** (xm_idx + 1) * self.dist_between_vertex * 0.5
                         y = ym + (-1) ** (ym_idx + 1) * self.dist_between_vertex * 0.5
@@ -254,7 +253,7 @@ class Solver:
                         term_3 = ((x - xp) * (y - yp)) / 4 * ((x - xp) + (y - yp))
 
                         # accumulate on amn
-                        amn += sign * (term_1 + term_2 - term_3 - r**3 / 6)
+                        amn += sign * (term_1 + term_2 - term_3 - r ** 3 / 6)
 
         # multiply by constant and return
         return amn * 1 / (4 * pi * epsilon_0)
