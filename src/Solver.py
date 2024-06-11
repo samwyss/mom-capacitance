@@ -98,7 +98,7 @@ class Solver:
         )
 
         # plot charge distribution
-        plt.rcParams["text.usetex"] = True
+        # plt.rcParams["text.usetex"] = True # Enable me if you have TeX Live installed on your system
         fig, ax = plt.subplots(dpi=600, figsize=(5, 4))
         mesh = ax.pcolormesh(
             self.X,
